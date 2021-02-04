@@ -135,3 +135,5 @@ C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\ASPNETAOP.pdb
 C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\ASPNETAOP.genruntimeconfig.cache
 C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\Razor\Views\UserRegistration\Create.cshtml.g.cs
 C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\Razor\Views\UserLogin\Login.cshtml.g.cs
+C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\Razor\Views\UserProfile\Profile.cshtml.g.cs
+C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\Razor\Views\Shared\Index.cshtml.g.cs

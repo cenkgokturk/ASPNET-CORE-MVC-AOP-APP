@@ -50,7 +50,7 @@ namespace ASPNETAOP
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=UserRegistration}/{action=Create}/{id?}");
+                    pattern: "{controller=UserLogin}/{action=Login}/{id?}");
             });
         }
     }

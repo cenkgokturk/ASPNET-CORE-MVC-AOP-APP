@@ -1,0 +1,30 @@
+﻿@model ASPNETAOP.Models.UserProfile
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1>Login</h1>
+
+<h4>Login</h4>
+<hr />
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="Profile">
+
+            <h6>Username</h6>
+            <b>@ViewData["Username"]</b>
+
+            h6>Username</h6>
+            <b>@ViewData["Username"]</b>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

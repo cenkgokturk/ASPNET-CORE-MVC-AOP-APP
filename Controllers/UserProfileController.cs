@@ -9,26 +9,25 @@ using ASPNETAOP.Models;
 
 namespace ASPNETAOP.Controllers
 {
-    public class UserLoginController : Controller
+    public class UserProfileController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Login()
+        public IActionResult Profile()
         {
             return View();
         }
 
-        //[isAuthenticated]
         [HttpPost]
-        public IActionResult Login(UserLogin ur)
+        public IActionResult Profile(UserProfile ur)
         {
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
-                string sqlquery = "select '" + ur.Userpassword + "' from AccountInfo where Usermail = '" + ur.Usermail + "' ";
+                string sqlquery = "select '" + ur.Username + "', '" + ur.Usermail + "' from AccountInfo where Usermail = cenkgokturk06@gmail.com'" ;
                 using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
                 {
                     sqlconn.Open();
@@ -38,10 +37,9 @@ namespace ASPNETAOP.Controllers
                     {
                         while (reader.Read())
                         {
-                            Console.WriteLine("{0}", reader.GetString(0));
-                            if (!reader.GetString(0).Equals(ur.Userpassword)){
-                                ViewData["Message"] = "Check your email and and password";
-                            }
+                            Console.WriteLine("{0},", reader.GetString(0));
+                            ViewData["User-name"] = reader.GetString(0);
+                            ViewData["User-mail"] = reader.GetString(1);
                         }
                     }
                     else
@@ -52,8 +50,6 @@ namespace ASPNETAOP.Controllers
                     reader.Close();
                 }
             }
-            ViewData["Message"] = "Welcome: " + ur.Usermail;
-
             return View(ur);
         }
     }

@@ -11,6 +11,7 @@ namespace ASPNETAOP.Controllers
 {
     public class UserRegistrationController : Controller
     {
+        [Route("Home/Index")]
         public IActionResult Index()
         {
             return View();
