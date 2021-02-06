@@ -708,6 +708,31 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
+      "PostSharp/6.8.8": {
+        "type": "package",
+        "dependencies": {
+          "PostSharp.Redist": "[6.8.8, 7.0.0)"
+        },
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "build": {
+          "build/PostSharp.props": {},
+          "build/PostSharp.targets": {}
+        }
+      },
+      "PostSharp.Redist/6.8.8": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/PostSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/PostSharp.dll": {}
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
         "type": "package",
         "runtimeTargets": {
@@ -3435,6 +3460,66 @@
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "newtonsoft.json.11.0.2.nupkg.sha512",
         "newtonsoft.json.nuspec"
+      ]
+    },
+    "PostSharp/6.8.8": {
+      "sha512": "V2sKOiqyXD3L+vEu3cHDN4pY0wQeT6sIAyzZwaHB66ieKaTxxMe/gAu7qP7UtTTx1KAoVd2IvAGhfkksNs7FBg==",
+      "type": "package",
+      "path": "postsharp/6.8.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "THIRD-PARTY-NOTICES.html",
+        "build/PostSharp-Tools.7z",
+        "build/PostSharp.BeforeTargetFrameworkInference.targets",
+        "build/PostSharp.Version.properties",
+        "build/PostSharp.properties",
+        "build/PostSharp.props",
+        "build/PostSharp.targets",
+        "build/PostSharp.tasks",
+        "build/_common/unzipper/SharpCompress.dll",
+        "build/_common/unzipper/System.Runtime.CompilerServices.Unsafe.dll",
+        "build/_common/unzipper/System.Text.Encoding.CodePages.dll",
+        "build/_common/unzipper/runtimes/win/lib/netcoreapp2.0/System.Text.Encoding.CodePages.dll",
+        "build/_common/unzipper/unzipper.deps.json",
+        "build/_common/unzipper/unzipper.dll",
+        "build/_common/unzipper/unzipper.exe",
+        "build/_common/unzipper/unzipper.exe.config",
+        "build/_common/unzipper/unzipper.pdb",
+        "build/_common/unzipper/unzipper.runtimeconfig.json",
+        "build/net472/PostSharp.MSBuild.v6.8.8.Release.dll",
+        "build/net472/PostSharp.MSBuild.v6.8.8.Release.pdb",
+        "build/netcoreapp2.1/PostSharp.MSBuild.v6.8.8.Release.dll",
+        "build/netcoreapp2.1/PostSharp.MSBuild.v6.8.8.Release.pdb",
+        "icon.png",
+        "lib/net35-client/_._",
+        "lib/netstandard1.0/_._",
+        "postsharp.6.8.8.nupkg.sha512",
+        "postsharp.nuspec"
+      ]
+    },
+    "PostSharp.Redist/6.8.8": {
+      "sha512": "ujcGYLO6cI1r91NxT/GB5n/cdwgE5mkkrXInAkiFmSD2fk8/DxbAHNVO1KnuqnnvXJB+D7ByPs3ORfTpzypWLw==",
+      "type": "package",
+      "path": "postsharp.redist/6.8.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "icon.png",
+        "lib/net35-client/PostSharp.dll",
+        "lib/net35-client/PostSharp.xml",
+        "lib/net45/PostSharp.dll",
+        "lib/net45/PostSharp.xml",
+        "lib/net5.0/PostSharp.dll",
+        "lib/net5.0/PostSharp.xml",
+        "lib/netstandard1.3/PostSharp.dll",
+        "lib/netstandard1.3/PostSharp.xml",
+        "lib/netstandard2.0/PostSharp.dll",
+        "lib/netstandard2.0/PostSharp.xml",
+        "postsharp.redist.6.8.8.nupkg.sha512",
+        "postsharp.redist.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -7246,7 +7331,8 @@
   "projectFileDependencyGroups": {
     "net5.0": [
       "Microsoft.Data.SqlClient >= 2.1.1",
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.1"
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.1",
+      "PostSharp >= 6.8.8"
     ]
   },
   "packageFolders": {
@@ -7295,6 +7381,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[5.0.1, )"
+          },
+          "PostSharp": {
+            "target": "Package",
+            "version": "[6.8.8, )"
           }
         },
         "imports": [
@@ -7307,6 +7397,20 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[3.0.1, 3.0.1]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[3.0.0, 3.0.0]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[3.0.0, 3.0.0]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"

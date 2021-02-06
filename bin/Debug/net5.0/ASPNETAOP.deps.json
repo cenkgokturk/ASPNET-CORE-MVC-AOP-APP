@@ -5,6 +5,7 @@
   },
   "compilationOptions": {
     "defines": [
+      "POSTSHARP",
       "TRACE",
       "DEBUG",
       "NET",
@@ -27,6 +28,7 @@
         "dependencies": {
           "Microsoft.Data.SqlClient": "2.1.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "5.0.1",
+          "PostSharp": "6.8.8",
           "Microsoft.AspNetCore.Antiforgery": "5.0.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.Authentication.Cookies": "5.0.0.0",
@@ -973,6 +975,22 @@
         },
         "compile": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "PostSharp/6.8.8": {
+        "dependencies": {
+          "PostSharp.Redist": "6.8.8"
+        }
+      },
+      "PostSharp.Redist/6.8.8": {
+        "runtime": {
+          "lib/net5.0/PostSharp.dll": {
+            "assemblyVersion": "6.8.8.0",
+            "fileVersion": "6.8.8.0"
+          }
+        },
+        "compile": {
+          "lib/net5.0/PostSharp.dll": {}
         }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
@@ -3754,6 +3772,20 @@
       "sha512": "sha512-IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
       "path": "newtonsoft.json/11.0.2",
       "hashPath": "newtonsoft.json.11.0.2.nupkg.sha512"
+    },
+    "PostSharp/6.8.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V2sKOiqyXD3L+vEu3cHDN4pY0wQeT6sIAyzZwaHB66ieKaTxxMe/gAu7qP7UtTTx1KAoVd2IvAGhfkksNs7FBg==",
+      "path": "postsharp/6.8.8",
+      "hashPath": "postsharp.6.8.8.nupkg.sha512"
+    },
+    "PostSharp.Redist/6.8.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ujcGYLO6cI1r91NxT/GB5n/cdwgE5mkkrXInAkiFmSD2fk8/DxbAHNVO1KnuqnnvXJB+D7ByPs3ORfTpzypWLw==",
+      "path": "postsharp.redist/6.8.8",
+      "hashPath": "postsharp.redist.6.8.8.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",

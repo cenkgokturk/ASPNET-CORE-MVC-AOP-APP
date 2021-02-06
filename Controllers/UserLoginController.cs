@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Data;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
+using ASPNETAOP.Aspect;
 
 namespace ASPNETAOP.Controllers
 {
@@ -21,14 +22,33 @@ namespace ASPNETAOP.Controllers
             return View();
         }
 
-        //[isAuthenticated]
+        public void SaveCookie(UserLogin ur)
+        {
+            String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
+            using (SqlConnection sqlconn = new SqlConnection(connection))
+            {
+                DateTime thisDay = DateTime.Today;
+                //  30/3/2020 12:00 AM
+                //0 - Logged Out & 1 - Logged in
+                string sqlQuerySession = "insert into AccountSessions(Usermail, LoginDate, IsLoggedIn) values ('" + ur.Usermail + "', '" + thisDay.ToString("g") + "', 1 )";
+                using (SqlCommand sqlcommCookie = new SqlCommand(sqlQuerySession, sqlconn))
+                {
+                    sqlconn.Open();
+                    sqlcommCookie.ExecuteNonQuery();
+                    Console.WriteLine("Cookie has been saved");
+                }
+            }
+        }
+
+
+        [IsAuthenticated]
         [HttpPost]
         public IActionResult Login(UserLogin ur)
         {
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
-                string sqlquery = "select '" + ur.Userpassword + "' from AccountInfo where Usermail = '" + ur.Usermail + "' ";
+                string sqlquery = "select Userpassword from AccountInfo where Usermail = '" + ur.Usermail + "' ";
                 using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
                 {
                     sqlconn.Open();
@@ -38,21 +58,32 @@ namespace ASPNETAOP.Controllers
                     {
                         while (reader.Read())
                         {
-                            Console.WriteLine("{0}", reader.GetString(0));
-                            if (!reader.GetString(0).Equals(ur.Userpassword)){
-                                ViewData["Message"] = "Check your email and and password";
+                            Console.WriteLine("{0}, {1}", reader.GetString(0), ur.Userpassword);
+                            if (reader.GetString(0).Equals(ur.Userpassword)){
+                                Console.WriteLine("True");
+                                ViewData["Message"] = "Welcome: " + ur.Usermail;
+
+
+                                reader.Close();
+                                sqlconn.Close();
+                                SaveCookie(ur);
+                                break;
+                            }
+                            else
+                            {
+                                ViewData["Message"] = "Incorrect password";
+                                Redirect("Index");
                             }
                         }
                     }
                     else
                     {
                         ViewData["Message"] = "No user with this email address has been found";
-                        return View();
                     }
                     reader.Close();
                 }
+
             }
-            ViewData["Message"] = "Welcome: " + ur.Usermail;
 
             return View(ur);
         }
