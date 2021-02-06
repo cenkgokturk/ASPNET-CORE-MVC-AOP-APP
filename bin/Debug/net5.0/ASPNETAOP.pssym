@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Symbols LinesOfCode="187" PostSharpLinesOfCode="0" EnhancedTypesCount="2" SchemaVersion="1" PostSharpVersion="6.8.8.0" xmlns="http://schemas.postsharp.org/2.0/symbols">
+<Symbols LinesOfCode="212" PostSharpLinesOfCode="0" EnhancedTypesCount="2" SchemaVersion="1" PostSharpVersion="6.8.8.0" xmlns="http://schemas.postsharp.org/2.0/symbols">
   <Class Class="#1=T:[PostSharp]PostSharp.Serialization.PSerializableAttribute">
-    <Instance Declaration="#2=T:[ASPNETAOP]ASPNETAOP.Aspect.IsAuthenticatedAttribute" Id="4ad7b5cea0034b39">
+    <Instance Declaration="#2=T:[ASPNETAOP]ASPNETAOP.Aspect.IsAuthenticatedAttribute" Id="4ad7b5ce1717c1ac">
       <Target />
     </Instance>
   </Class>
   <Class Class="#2">
-    <Instance Declaration="#3=M:[ASPNETAOP]ASPNETAOP.Controllers.UserLoginController::Login([ASPNETAOP]ASPNETAOP.Models.UserLogin)" Id="4ad7b5ce45043cd6">
+    <Instance Declaration="#3=M:[ASPNETAOP]ASPNETAOP.Controllers.UserLoginController::Login([ASPNETAOP]ASPNETAOP.Models.UserLogin)" Id="4ad7b5ce7d8d8752">
       <Target LinesAvoided="2">
         <JoinPoint Description="#4=Wrapped by advice(s) OnEntry" Ordinal="0" />
       </Target>

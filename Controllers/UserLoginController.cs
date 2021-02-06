@@ -67,18 +67,22 @@ namespace ASPNETAOP.Controllers
                                 reader.Close();
                                 sqlconn.Close();
                                 SaveCookie(ur);
-                                break;
+
+                                ViewData["Message"] = "Successfully logged in";
+                                reader.Close();
+                                return RedirectToAction("Profile","UserProfile", new { ur });
                             }
                             else
                             {
                                 ViewData["Message"] = "Incorrect password";
-                                Redirect("Index");
                             }
                         }
                     }
                     else
                     {
                         ViewData["Message"] = "No user with this email address has been found";
+                        reader.Close();
+                        return RedirectToAction("Create", "UserRegistration");
                     }
                     reader.Close();
                 }
