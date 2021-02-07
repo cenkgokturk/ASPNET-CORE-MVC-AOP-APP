@@ -28,7 +28,7 @@ namespace ASPNETAOP.Controllers
             var model = new List<AdminPage>();
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
-                string sqlquery = "select Username, Usermail from AccountInfo";
+                string sqlquery = "select AI.Username, AI.Usermail, AcS.LoginDate, AcS.IsLoggedIn from AccountInfo AI, AccountSessions AcS WHERE AI.Usermail=AcS.Usermail";
                 using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
                 {
                     sqlconn.Open();
@@ -41,6 +41,8 @@ namespace ASPNETAOP.Controllers
                             var user = new AdminPage();
                             user.Username = (string)reader["Username"];
                             user.Usermail = (string)reader["Usermail"];
+                            user.LoginDate = (string)reader["LoginDate"];
+                            user.IsLoggedIn = (int)reader["IsLoggedIn"];
 
                             model.Add(user);
                         }

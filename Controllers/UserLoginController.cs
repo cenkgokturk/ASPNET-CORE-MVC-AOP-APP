@@ -27,7 +27,7 @@ namespace ASPNETAOP.Controllers
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
-                DateTime thisDay = DateTime.Today;
+                DateTime thisDay = DateTime.Now;
                 //  30/3/2020 12:00 AM
                 //0 - Logged Out & 1 - Logged in
                 string sqlQuerySession = "insert into AccountSessions(Usermail, LoginDate, IsLoggedIn) values ('" + ur.Usermail + "', '" + thisDay.ToString("g") + "', 1 )";

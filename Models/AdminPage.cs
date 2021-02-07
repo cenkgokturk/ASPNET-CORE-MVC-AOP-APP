@@ -9,6 +9,8 @@ namespace ASPNETAOP.Models
     {
         public string Username { get; set; }
         public string Usermail { get; set; }
+        public string LoginDate { get; set; }
+        public int IsLoggedIn { get; set; }
 
     }
 }
