@@ -19,7 +19,7 @@ namespace ASPNETAOP.Aspect
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
-                string sqlquery = "SELECT Usermail FROM AccountSessions WHERE IsLoggedIn = 1;";
+                string sqlquery = "SELECT UR.Roleid FROM AccountSessions AcS, UserRoles UR, AccountInfo AI WHERE AcS.IsLoggedIn = 1 AND AI.Usermail = Acs.Usermail AND AI.UserID = UR.UserID;";
                 using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
                 {
                     sqlconn.Open();
@@ -29,9 +29,7 @@ namespace ASPNETAOP.Aspect
                     {
                         while (reader.Read())
                         {
-                            String mail = reader.GetString(0);
-                            Console.WriteLine("Authorized: " + mail);
-                            if (mail.Equals("admin@admin.com")) { }
+                            if (reader.GetInt32(0) == 1) { }
                             else
                             {
                                 throw new Exception("You don't have the necessary permission");

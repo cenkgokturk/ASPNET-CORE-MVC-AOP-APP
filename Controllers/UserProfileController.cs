@@ -7,9 +7,11 @@ using Microsoft.Data;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
 using ASPNETAOP.Aspect;
+using System.Runtime.InteropServices;
 
 namespace ASPNETAOP.Controllers
 {
+    [Guid("18020B1D-DB0B-4600-9443-8ACA5C6CF4FE")]
     public class UserProfileController : Controller
     {
         public IActionResult Index()
@@ -17,6 +19,7 @@ namespace ASPNETAOP.Controllers
             return View();
         }
 
+        
         [IsAuthenticated]
         public IActionResult Profile()
         {

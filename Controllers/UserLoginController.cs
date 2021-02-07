@@ -43,6 +43,7 @@ namespace ASPNETAOP.Controllers
         [HttpPost]
         public IActionResult Login(UserLogin ur)
         {
+
             Console.WriteLine("Login: " + ur.Usermail);
 
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";

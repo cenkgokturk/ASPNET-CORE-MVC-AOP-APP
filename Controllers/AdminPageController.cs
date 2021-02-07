@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using ASPNETAOP.Aspect;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
+using System.Runtime.InteropServices;
 
 namespace ASPNETAOP.Controllers
 {
+    [Guid("45EADA4A-CFB8-46A9-8DDB-5A1ACCC89D2A")]
     public class AdminPageController : Controller
     {
         public IActionResult Index()
