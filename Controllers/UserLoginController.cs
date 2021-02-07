@@ -40,11 +40,11 @@ namespace ASPNETAOP.Controllers
             }
         }
 
-
-        [IsAuthenticated]
         [HttpPost]
         public IActionResult Login(UserLogin ur)
         {
+            Console.WriteLine("Login: " + ur.Usermail);
+
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {

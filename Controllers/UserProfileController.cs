@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Data;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
+using ASPNETAOP.Aspect;
 
 namespace ASPNETAOP.Controllers
 {
@@ -16,6 +17,7 @@ namespace ASPNETAOP.Controllers
             return View();
         }
 
+        [IsAuthenticated]
         public IActionResult Profile()
         {
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
@@ -23,7 +25,7 @@ namespace ASPNETAOP.Controllers
             Console.WriteLine("Start of profile");
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
-                string sqlquery = "select Username, Usermail from AccountInfo where Usermail = 'admin@admin.com'";
+                string sqlquery = "SELECT I.Username, I.Usermail FROM AccountSessions S, AccountInfo I WHERE S.Usermail = I.Usermail AND S.IsLoggedIn = 1;";
                 using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
                 {
                     sqlconn.Open();
@@ -33,8 +35,8 @@ namespace ASPNETAOP.Controllers
                     {
                         while (reader.Read())
                         {
-                            Console.WriteLine("{0} is the profile section", reader.GetString(0));
                             ViewData["message"] = "User name: " + reader.GetString(0) + "\r\n Mail: " + reader.GetString(1) ;
+                            break;
                         }
                     }
                     else
@@ -49,11 +51,12 @@ namespace ASPNETAOP.Controllers
         }
 
         [HttpPost]
-        public IActionResult Profile(UserProfile ur)
+        public IActionResult Profile(UserLogin ur)
         {
+
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
 
-            Console.WriteLine("Start of profile");
+            Console.WriteLine("Profile: " + ur.Usermail);
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
                 string sqlquery = "select Username, Usermail from AccountInfo where Usermail = '" + ur.Usermail + "' ";
