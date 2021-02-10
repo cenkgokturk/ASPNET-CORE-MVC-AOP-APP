@@ -7,11 +7,10 @@ namespace ASPNETAOP.Models
 {
     public class CurrentUser
     {
-        public String[] CurrentUserInfo = new String[4];
+        public String[] CurrentUserInfo = new String[3];
         //0 - id 
         //1 - username
         //2 - usermail
-        //3 - session date 
 
         public static readonly CurrentUser currentUser = new CurrentUser();
 

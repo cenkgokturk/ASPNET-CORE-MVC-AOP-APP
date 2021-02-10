@@ -19,43 +19,10 @@ namespace ASPNETAOP.Controllers
             return View();
         }
 
-        
         [IsAuthenticated]
         public IActionResult Profile()
         {
             ViewData["message"] = "User name: " + Models.CurrentUser.currentUser.CurrentUserInfo[1] + "\r\n Mail: " + Models.CurrentUser.currentUser.CurrentUserInfo[2];
-
-
-            /*
-            String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
-
-            Console.WriteLine("Start of profile");
-            using (SqlConnection sqlconn = new SqlConnection(connection))
-            {
-                string sqlquery = "SELECT I.Username, I.Usermail FROM AccountSessions S, AccountInfo I WHERE S.Usermail = I.Usermail AND S.IsLoggedIn = 1;";
-                using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
-                {
-                    sqlconn.Open();
-                    SqlDataReader reader = sqlcomm.ExecuteReader();
-
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-
-                            ViewData["message"] = "User name: " + reader.GetString(0) + "\r\n Mail: " + reader.GetString(1) ;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        ViewData["Message"] = "No user with this email address has been found";
-                        return View();
-                    }
-                    reader.Close();
-                }
-            }
-            */
             return View();
         }
 
@@ -63,36 +30,6 @@ namespace ASPNETAOP.Controllers
         public IActionResult Profile(UserLogin ur)
         {
             ViewData["message"] = "User name: " + Models.CurrentUser.currentUser.CurrentUserInfo[1] + "\r\n Mail: " + Models.CurrentUser.currentUser.CurrentUserInfo[2];
-
-            /*
-            String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
-
-            Console.WriteLine("Profile: " + ur.Usermail);
-            using (SqlConnection sqlconn = new SqlConnection(connection))
-            {
-                string sqlquery = "select Username, Usermail from AccountInfo where Usermail = '" + ur.Usermail + "' ";
-                using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
-                {
-                    sqlconn.Open();
-                    SqlDataReader reader = sqlcomm.ExecuteReader();
-
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            Console.WriteLine("{0} is the profile section", reader.GetString(0));
-                            ViewData["message"] = reader.GetString(0) + ", " + reader.GetString(1);
-                        }
-                    }
-                    else
-                    {
-                        ViewData["Message"] = "No user with this email address has been found";
-                        return View();
-                    }
-                    reader.Close();
-                }
-            }
-            */
             return View(ur);
         }
     }

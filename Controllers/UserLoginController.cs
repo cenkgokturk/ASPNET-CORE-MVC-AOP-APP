@@ -41,9 +41,6 @@ namespace ASPNETAOP.Controllers
                 {
                     sqlconn.Open();
                     sqlcommCookie.ExecuteNonQuery();
-
-
-                    Console.WriteLine("Cookie has been saved");
                 }
             }
         }
@@ -51,9 +48,6 @@ namespace ASPNETAOP.Controllers
         [HttpPost]
         public IActionResult Login(UserLogin ur)
         {
-
-            Console.WriteLine("Login: " + ur.Usermail);
-
             String connection = _configuration.GetConnectionString("localDatabase");
 
             using (SqlConnection sqlconn = new SqlConnection(connection))
@@ -68,11 +62,10 @@ namespace ASPNETAOP.Controllers
                     {
                         while (reader.Read())
                         {
-                            Console.WriteLine("{0}, {1}", reader.GetString(0), ur.Userpassword);
                             if (reader.GetString(0).Equals(ur.Userpassword)){
-                                Console.WriteLine("True");
                                 ViewData["Message"] = "Welcome: " + ur.Usermail;
 
+                                //Add the user to the CurrentUserInfo array
                                 Models.CurrentUser.currentUser.CurrentUserInfo[0] = reader.GetInt32(1).ToString();    //UserID
                                 Models.CurrentUser.currentUser.CurrentUserInfo[1] = reader.GetString(2);    //Username
                                 Models.CurrentUser.currentUser.CurrentUserInfo[2] = ur.Usermail;            

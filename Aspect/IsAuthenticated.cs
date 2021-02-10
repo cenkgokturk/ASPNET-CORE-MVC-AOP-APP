@@ -19,33 +19,7 @@ namespace ASPNETAOP.Aspect
 
         public override void OnEntry(MethodExecutionArgs args)
         {
-            Console.WriteLine("Method Entry");
-
             if (Models.CurrentUser.currentUser.CurrentUserInfo[0] == null) throw new UserNotLoggedInException("You are not logged in");
-
-            /*
-            String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
-            using (SqlConnection sqlconn = new SqlConnection(connection))
-            {
-                string sqlquery = "SELECT I.UserID, I.Username, I.Usermail FROM AccountSessions S, AccountInfo I WHERE S.Usermail = I.Usermail AND S.IsLoggedIn = 1;";
-                using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
-                {
-                    sqlconn.Open();
-                    SqlDataReader reader = sqlcomm.ExecuteReader();
-                
-                    if (reader.HasRows){
-                        
-                        
-                    }
-                    else
-                    {
-                        throw new Exception();
-                    }
-                    reader.Close();
-                }
-            }
-
-            */
         }
     }
 
