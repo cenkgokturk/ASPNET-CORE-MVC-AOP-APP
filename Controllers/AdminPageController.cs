@@ -7,12 +7,17 @@ using ASPNETAOP.Aspect;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Configuration;
 
 namespace ASPNETAOP.Controllers
 {
     [Guid("45EADA4A-CFB8-46A9-8DDB-5A1ACCC89D2A")]
     public class AdminPageController : Controller
     {
+        private IConfiguration _configuration;
+        public AdminPageController(IConfiguration Configuration) { _configuration = Configuration; }
+
+
         public IActionResult Index()
         {
             return View();
@@ -23,7 +28,7 @@ namespace ASPNETAOP.Controllers
         public IActionResult UserList()
         {
 
-            String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
+            String connection = _configuration.GetConnectionString("localDatabase");
 
             var model = new List<AdminPage>();
             using (SqlConnection sqlconn = new SqlConnection(connection))

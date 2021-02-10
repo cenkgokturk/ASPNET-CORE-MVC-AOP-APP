@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,14 @@ namespace ASPNETAOP.Controllers
 {
     public class UserLogoutController : Controller
     {
+        private IConfiguration _configuration;
+        public UserLogoutController(IConfiguration Configuration) { _configuration = Configuration; }
+
+
         public IActionResult Logout()
         {
             //Change IsLoggedIn to 0 in AccountSessions table
-            String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
+            String connection = _configuration.GetConnectionString("localDatabase");
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
                 string sqlquery = "UPDATE AccountSessions SET IsLoggedIn = 0 WHERE IsLoggedIn = 1;";

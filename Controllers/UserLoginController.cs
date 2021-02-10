@@ -7,11 +7,17 @@ using Microsoft.Data;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
 using ASPNETAOP.Aspect;
+using ASPNETAOP;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
 
 namespace ASPNETAOP.Controllers
 {
     public class UserLoginController : Controller
     {
+        private IConfiguration _configuration;
+        public UserLoginController(IConfiguration Configuration) { _configuration = Configuration; }
+
         public IActionResult Index()
         {
             return View();
@@ -24,7 +30,7 @@ namespace ASPNETAOP.Controllers
 
         public void SaveCookie(UserLogin ur)
         {
-            String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
+            String connection = _configuration.GetConnectionString("localDatabase");
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
                 DateTime thisDay = DateTime.Now;
@@ -48,7 +54,8 @@ namespace ASPNETAOP.Controllers
 
             Console.WriteLine("Login: " + ur.Usermail);
 
-            String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
+            String connection = _configuration.GetConnectionString("localDatabase");
+
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
                 string sqlquery = "select Userpassword, UserID, Username  from AccountInfo where Usermail = '" + ur.Usermail + "' ";

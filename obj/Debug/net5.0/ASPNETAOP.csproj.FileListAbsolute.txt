@@ -141,4 +141,3 @@ C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\PostSharp\touch
 C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\PostSharp\dependencies.txt
 C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\PostSharp\postsharp.app.config
 C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\Razor\Views\AdminPage\UserList.cshtml.g.cs
-C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\ASPNETAOP.csprojAssemblyReference.cache

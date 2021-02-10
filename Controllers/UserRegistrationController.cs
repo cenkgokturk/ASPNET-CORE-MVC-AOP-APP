@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.Data;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace ASPNETAOP.Controllers
 {
     public class UserRegistrationController : Controller
     {
+        private IConfiguration _configuration;
+        public UserRegistrationController(IConfiguration Configuration) { _configuration = Configuration; }
+
         [Route("Home/Index")]
         public IActionResult Index()
         {
@@ -25,8 +29,8 @@ namespace ASPNETAOP.Controllers
         [HttpPost]
         public IActionResult Create(UserRegister ur)
         {
-            String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
-            using(SqlConnection sqlconn = new SqlConnection(connection))
+            String connection = _configuration.GetConnectionString("localDatabase");
+            using (SqlConnection sqlconn = new SqlConnection(connection))
             {
                 string sqlquery = "insert into AccountInfo(Username, Usermail, Userpassword) values ('" + ur.Username + "', '" + ur.Usermail + "', '" + ur.Userpassword + "' )";
                 using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
