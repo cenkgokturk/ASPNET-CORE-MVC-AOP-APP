@@ -11,6 +11,7 @@ namespace ASPNETAOP.Controllers
     {
         public IActionResult Logout()
         {
+            //Change IsLoggedIn to 0 in AccountSessions table
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
@@ -21,6 +22,13 @@ namespace ASPNETAOP.Controllers
                     sqlcomm.ExecuteNonQuery();
                 }
             }
+            
+            //remove the records of the currently logged in user from the global currentUserInfo array
+            for(int i=0; i<4; i++)
+            {
+                Models.CurrentUser.currentUser.CurrentUserInfo[i] = null;
+            }
+
             return RedirectToAction("Login", "UserLogin");
         }
     }

@@ -36,6 +36,7 @@ namespace ASPNETAOP.Controllers
                     ViewData["Message"] = "New User "+ur.Username+ " is saved successfully";
                 }
             }
+
             return View(ur);
         }
     }

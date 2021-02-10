@@ -35,6 +35,8 @@ namespace ASPNETAOP.Controllers
                 {
                     sqlconn.Open();
                     sqlcommCookie.ExecuteNonQuery();
+
+
                     Console.WriteLine("Cookie has been saved");
                 }
             }
@@ -49,7 +51,7 @@ namespace ASPNETAOP.Controllers
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
-                string sqlquery = "select Userpassword from AccountInfo where Usermail = '" + ur.Usermail + "' ";
+                string sqlquery = "select Userpassword, UserID, Username  from AccountInfo where Usermail = '" + ur.Usermail + "' ";
                 using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
                 {
                     sqlconn.Open();
@@ -63,6 +65,10 @@ namespace ASPNETAOP.Controllers
                             if (reader.GetString(0).Equals(ur.Userpassword)){
                                 Console.WriteLine("True");
                                 ViewData["Message"] = "Welcome: " + ur.Usermail;
+
+                                Models.CurrentUser.currentUser.CurrentUserInfo[0] = reader.GetInt32(1).ToString();    //UserID
+                                Models.CurrentUser.currentUser.CurrentUserInfo[1] = reader.GetString(2);    //Username
+                                Models.CurrentUser.currentUser.CurrentUserInfo[2] = ur.Usermail;            
 
 
                                 reader.Close();

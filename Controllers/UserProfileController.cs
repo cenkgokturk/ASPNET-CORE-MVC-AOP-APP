@@ -23,6 +23,10 @@ namespace ASPNETAOP.Controllers
         [IsAuthenticated]
         public IActionResult Profile()
         {
+            ViewData["message"] = "User name: " + Models.CurrentUser.currentUser.CurrentUserInfo[1] + "\r\n Mail: " + Models.CurrentUser.currentUser.CurrentUserInfo[2];
+
+
+            /*
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
 
             Console.WriteLine("Start of profile");
@@ -38,6 +42,7 @@ namespace ASPNETAOP.Controllers
                     {
                         while (reader.Read())
                         {
+
                             ViewData["message"] = "User name: " + reader.GetString(0) + "\r\n Mail: " + reader.GetString(1) ;
                             break;
                         }
@@ -50,13 +55,16 @@ namespace ASPNETAOP.Controllers
                     reader.Close();
                 }
             }
+            */
             return View();
         }
 
         [HttpPost]
         public IActionResult Profile(UserLogin ur)
         {
+            ViewData["message"] = "User name: " + Models.CurrentUser.currentUser.CurrentUserInfo[1] + "\r\n Mail: " + Models.CurrentUser.currentUser.CurrentUserInfo[2];
 
+            /*
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
 
             Console.WriteLine("Profile: " + ur.Usermail);
@@ -84,6 +92,7 @@ namespace ASPNETAOP.Controllers
                     reader.Close();
                 }
             }
+            */
             return View(ur);
         }
     }
