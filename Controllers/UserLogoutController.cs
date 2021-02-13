@@ -29,7 +29,7 @@ namespace ASPNETAOP.Controllers
             }
             
             //remove the records of the currently logged in user from the global currentUserInfo array
-            for(int i=0; i<4; i++)
+            for(int i=0; i<3; i++)
             {
                 Models.CurrentUser.currentUser.CurrentUserInfo[i] = null;
             }
