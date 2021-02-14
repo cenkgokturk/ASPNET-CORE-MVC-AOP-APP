@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ASPNETAOP_Session;
 
 namespace ASPNETAOP.Models
 {
     public class CurrentUser
     {
+
+
         public String[] CurrentUserInfo = new String[3];
         //0 - id 
         //1 - username
@@ -23,6 +26,8 @@ namespace ASPNETAOP.Models
         {
 
         }
+
+
 
         public String getUsername(){return CurrentUserInfo[1];}
         public String getUsermail(){return CurrentUserInfo[2];}

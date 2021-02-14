@@ -10,6 +10,7 @@ using ASPNETAOP.Aspect;
 using ASPNETAOP;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using ASPNETAOP_Session;
 
 namespace ASPNETAOP.Controllers
 {
@@ -45,6 +46,11 @@ namespace ASPNETAOP.Controllers
             }
         }
 
+
+        //When user is redirected to login page, user's info is 
+        //1. stored in CurrentUser array (in ASPNETAOP project)
+        //2. sent to UserSession (in ASPNETAOP-Session) to be stored in DatabaseDb 
+        //3. saved as a cookie (in ASPNETAOP) in AccountDb
         [HttpPost]
         public IActionResult Login(UserLogin ur)
         {
@@ -65,18 +71,34 @@ namespace ASPNETAOP.Controllers
                             if (reader.GetString(0).Equals(ur.Userpassword)){
                                 ViewData["Message"] = "Welcome: " + ur.Usermail;
 
-                                //Add the user to the CurrentUserInfo array
-                                Models.CurrentUser.currentUser.CurrentUserInfo[0] = reader.GetInt32(1).ToString();    //UserID
-                                Models.CurrentUser.currentUser.CurrentUserInfo[1] = reader.GetString(2);    //Username
-                                Models.CurrentUser.currentUser.CurrentUserInfo[2] = ur.Usermail;            
+                                //Hold current user's info in ASPNETAOP project 
+                                String userID = reader.GetInt32(1).ToString();    //UserID;
+                                String username = reader.GetString(2);    //Username;
+                                String usermail = ur.Usermail;
 
+                                Models.CurrentUser.currentUser.CurrentUserInfo[0] = userID;
+                                Models.CurrentUser.currentUser.CurrentUserInfo[1] = username;
+                                Models.CurrentUser.currentUser.CurrentUserInfo[2] = usermail;
+
+                                //Send the user's info to ASPNETAOP-Session
+                                String[] Info = {username, usermail};
+                                int id = -1;
+
+                                ASPNETAOP_Session.UserSession us = new UserSession();
+                                id = us.SetUser(new ASPNETAOP_Session.User(Info));
+
+                                //Store the retrieved token 
+                                ActiveUser.UserInfo.setID(id);
 
                                 reader.Close();
                                 sqlconn.Close();
+
+                                //Also, store user's session as a cookie in AccountDb
                                 SaveCookie(ur);
 
                                 ViewData["Message"] = "Successfully logged in";
                                 reader.Close();
+
                                 return RedirectToAction("Profile","UserProfile", new { ur });
                             }
                             else
@@ -89,6 +111,7 @@ namespace ASPNETAOP.Controllers
                     {
                         ViewData["Message"] = "No user with this email address has been found";
                         reader.Close();
+
                         return RedirectToAction("Create", "UserRegistration");
                     }
                     reader.Close();
