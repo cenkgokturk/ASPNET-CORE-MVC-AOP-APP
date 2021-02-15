@@ -12,15 +12,9 @@ namespace ASPNETAOP.Models
 
         public static readonly ActiveUser UserInfo = new ActiveUser();
 
-        public ActiveUser(int id)
-        {
-            this.id = id;
-        }
+        public ActiveUser(int id){ this.id = id;}
 
-        public void setID(int id)
-        {
-            this.id = id;
-        }
+        public void setID(int id){ this.id = id;}
 
         public ActiveUser(){}
     }

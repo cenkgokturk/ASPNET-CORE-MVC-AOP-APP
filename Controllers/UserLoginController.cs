@@ -81,7 +81,9 @@ namespace ASPNETAOP.Controllers
                                 Models.CurrentUser.currentUser.CurrentUserInfo[2] = usermail;
 
                                 //Send the user's info to ASPNETAOP-Session
-                                String[] Info = {username, usermail};
+                                String[] Info = new string[2];
+                                Info[0] = username;
+                                Info[1] = usermail; 
                                 int id = -1;
 
                                 ASPNETAOP_Session.UserSession us = new UserSession();
