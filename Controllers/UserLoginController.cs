@@ -16,6 +16,8 @@ using System.Text;
 using System.Net.Http.Headers;
 using System.Diagnostics;
 using System.Net.Http.Json;
+using AspNetCore;
+using System.Web;
 
 namespace ASPNETAOP.Controllers
 {
@@ -23,6 +25,7 @@ namespace ASPNETAOP.Controllers
     {
         private IConfiguration _configuration;
         public UserLoginController(IConfiguration Configuration) { _configuration = Configuration; }
+
 
         public IActionResult Index()
         {
@@ -57,12 +60,17 @@ namespace ASPNETAOP.Controllers
         public void SendRequest(String[] ur)
         {
             HttpClient client = new HttpClient();
+
+            //Console.WriteLine("In UserLoginCOntroller -- session id is :" + (HttpContext.Session.Id));
+
+            SessionList.listObject.Pair.Add(new Pair(HttpContext.Session.Id, SessionList.listObject.count));
+
             PostJsonHttpClient("https://localhost:44316/api/SessionItems", client, ur);
         }
 
         private static async Task PostJsonHttpClient(string uri, HttpClient httpClient, String[] userInfo)
         {
-            var postUser = new SessionItem {  UserID = Int32.Parse(userInfo[0]), Username = userInfo[1], Usermail = userInfo[2], Roleid = Int32.Parse(userInfo[3]) };
+            var postUser = new SessionItem { Id = SessionList.listObject.count++,  UserID = Int32.Parse(userInfo[0]), Username = userInfo[1], Usermail = userInfo[2], Roleid = Int32.Parse(userInfo[3]) };
 
             var postResponse = await httpClient.PostAsJsonAsync(uri, postUser);
 
@@ -76,6 +84,7 @@ namespace ASPNETAOP.Controllers
         [HttpPost]
         public IActionResult Login(UserLogin ur)
         {
+
             String connection = _configuration.GetConnectionString("localDatabase");
 
             using (SqlConnection sqlconn = new SqlConnection(connection))

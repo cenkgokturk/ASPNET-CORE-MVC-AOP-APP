@@ -1,4 +1,5 @@
 using ASPNETAOP.Aspect;
+using ASPNETAOP.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,14 @@ namespace ASPNETAOP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(100);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             services.AddControllersWithViews();
             services.AddSingleton<IConfiguration>(Configuration);
@@ -100,6 +109,8 @@ namespace ASPNETAOP
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            SessionList.listObject.count = 0;
 
 
             app.UseHttpsRedirection();
