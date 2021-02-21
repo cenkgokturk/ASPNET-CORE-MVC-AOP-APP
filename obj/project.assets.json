@@ -2143,22 +2143,6 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
-      },
-      "ASPNETAOP-Session/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "dependencies": {
-          "Microsoft.Data.SqlClient": "2.1.1"
-        },
-        "compile": {
-          "bin/placeholder/ASPNETAOP-Session.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/ASPNETAOP-Session.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
       }
     }
   },
@@ -7354,16 +7338,10 @@
         "system.xml.xdocument.4.3.0.nupkg.sha512",
         "system.xml.xdocument.nuspec"
       ]
-    },
-    "ASPNETAOP-Session/1.0.0": {
-      "type": "project",
-      "path": "../ASPNETAOP-Session/ASPNETAOP-Session.csproj",
-      "msbuildProject": "../ASPNETAOP-Session/ASPNETAOP-Session.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "ASPNETAOP-Session >= 1.0.0",
       "Microsoft.Data.SqlClient >= 2.1.1",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.1",
       "PostSharp >= 6.8.8",
@@ -7396,11 +7374,7 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {
-            "C:\\Users\\Cenk\\source\\repos\\ASPNETAOP-Session\\ASPNETAOP-Session.csproj": {
-              "projectPath": "C:\\Users\\Cenk\\source\\repos\\ASPNETAOP-Session\\ASPNETAOP-Session.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {

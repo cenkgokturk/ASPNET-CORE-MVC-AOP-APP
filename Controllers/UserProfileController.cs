@@ -8,7 +8,6 @@ using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
 using ASPNETAOP.Aspect;
 using System.Runtime.InteropServices;
-using ASPNETAOP_Session;
 
 namespace ASPNETAOP.Controllers
 {
@@ -23,10 +22,7 @@ namespace ASPNETAOP.Controllers
         [IsAuthenticated]
         public IActionResult Profile()
         {
-            ASPNETAOP_Session.UserSession us = new UserSession();
-            User user = us.GetUser(Models.ActiveUser.UserInfo.id);
-
-            ViewData["message"] = "User name: " + user.getUsername() + "\r\n Mail: " + user.getUsermail();
+            ViewData["message"] = "User name: " + Models.CurrentUser.currentUser.getUsername() + "\r\n Mail: " + Models.CurrentUser.currentUser.getUsermail();
             return View();
         }
 

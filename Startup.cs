@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+//runs on localhost:44363
 namespace ASPNETAOP
 {
     public class Startup

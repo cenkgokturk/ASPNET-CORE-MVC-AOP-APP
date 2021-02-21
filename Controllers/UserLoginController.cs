@@ -10,7 +10,12 @@ using ASPNETAOP.Aspect;
 using ASPNETAOP;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
-using ASPNETAOP_Session;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Text;
+using System.Net.Http.Headers;
+using System.Diagnostics;
+using System.Net.Http.Json;
 
 namespace ASPNETAOP.Controllers
 {
@@ -29,6 +34,9 @@ namespace ASPNETAOP.Controllers
             return View();
         }
 
+
+        //Used to log user activies 
+        //Session managment has been moved to ASPNETAOP-WebServer solution, which can be accessed with SendRequest method
         public void SaveCookie(UserLogin ur)
         {
             String connection = _configuration.GetConnectionString("localDatabase");
@@ -46,6 +54,20 @@ namespace ASPNETAOP.Controllers
             }
         }
 
+        public void SendRequest(String[] ur)
+        {
+            HttpClient client = new HttpClient();
+            PostJsonHttpClient("https://localhost:44316/api/SessionItems", client, ur);
+        }
+
+        private static async Task PostJsonHttpClient(string uri, HttpClient httpClient, String[] userInfo)
+        {
+            var postUser = new SessionItem {  UserID = Int32.Parse(userInfo[0]), Username = userInfo[1], Usermail = userInfo[2], Roleid = Int32.Parse(userInfo[3]) };
+
+            var postResponse = await httpClient.PostAsJsonAsync(uri, postUser);
+
+            postResponse.EnsureSuccessStatusCode();
+        }
 
         //When user is redirected to login page, user's info is 
         //1. stored in CurrentUser array (in ASPNETAOP project)
@@ -58,7 +80,7 @@ namespace ASPNETAOP.Controllers
 
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
-                string sqlquery = "select Userpassword, UserID, Username  from AccountInfo where Usermail = '" + ur.Usermail + "' ";
+                string sqlquery = "select AI.Userpassword, AI.UserID, AI.Username, UR.Roleid  from AccountInfo AI, UserRoles UR where AI.UserID = UR.UserID AND AI.Usermail = '" + ur.Usermail + "' ";
                 using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
                 {
                     sqlconn.Open();
@@ -75,28 +97,21 @@ namespace ASPNETAOP.Controllers
                                 String userID = reader.GetInt32(1).ToString();    //UserID;
                                 String username = reader.GetString(2);    //Username;
                                 String usermail = ur.Usermail;
+                                String roleID = reader.GetInt32(3).ToString();
 
                                 Models.CurrentUser.currentUser.CurrentUserInfo[0] = userID;
                                 Models.CurrentUser.currentUser.CurrentUserInfo[1] = username;
                                 Models.CurrentUser.currentUser.CurrentUserInfo[2] = usermail;
 
-                                //Send the user's info to ASPNETAOP-Session
-                                String[] Info = new string[2];
-                                Info[0] = username;
-                                Info[1] = usermail; 
-                                int id = -1;
-
-                                ASPNETAOP_Session.UserSession us = new UserSession();
-                                id = us.SetUser(new ASPNETAOP_Session.User(Info));
-
-                                //Store the retrieved token 
-                                ActiveUser.UserInfo.setID(id);
-
                                 reader.Close();
                                 sqlconn.Close();
 
-                                //Also, store user's session as a cookie in AccountDb
+                                //Store user's session as a cookie in AccountDb
                                 SaveCookie(ur);
+
+                                //Send the user information to ASPNETAOP-WebServer for session
+                                String[] UserLoggedIn = {userID, username, usermail, roleID};
+                                SendRequest(UserLoggedIn);
 
                                 ViewData["Message"] = "Successfully logged in";
                                 reader.Close();

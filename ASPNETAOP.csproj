@@ -11,8 +11,4 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ASPNETAOP-Session\ASPNETAOP-Session.csproj" />
-  </ItemGroup>
-
 </Project>
