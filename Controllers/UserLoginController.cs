@@ -9,15 +9,8 @@ using ASPNETAOP.Models;
 using ASPNETAOP.Aspect;
 using ASPNETAOP;
 using Microsoft.Extensions.Configuration;
-using System.Configuration;
 using System.Net.Http;
-using Newtonsoft.Json;
-using System.Text;
-using System.Net.Http.Headers;
-using System.Diagnostics;
 using System.Net.Http.Json;
-using AspNetCore;
-using System.Web;
 
 namespace ASPNETAOP.Controllers
 {
@@ -61,7 +54,7 @@ namespace ASPNETAOP.Controllers
         {
             HttpClient client = new HttpClient();
 
-            //Console.WriteLine("In UserLoginCOntroller -- session id is :" + (HttpContext.Session.Id));
+            Console.WriteLine("In UserLoginCOntroller -- session id is :" + (HttpContext.Session.Id));
 
             SessionList.listObject.Pair.Add(new Pair(HttpContext.Session.Id, SessionList.listObject.count));
 

@@ -9,6 +9,8 @@ namespace ASPNETAOP.Models
     public class SessionList
     {
         public static readonly SessionList listObject = new SessionList();
+        
+        public int count;
 
         public ArrayList Pair = new ArrayList();
 

@@ -112,6 +112,7 @@ namespace ASPNETAOP
 
             SessionList.listObject.count = 0;
 
+            app.UseSession();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
