@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ASPNETAOP.Models
 {
@@ -16,14 +13,8 @@ namespace ASPNETAOP.Models
             this.requestID = requestID;
         }
 
-        public String getSessionID()
-        {
-            return this.sessionID;
-        }
+        public String getSessionID(){ return this.sessionID;}
 
-        public int getRequestID()
-        {
-            return this.requestID;
-        }
+        public int getRequestID(){ return this.requestID;}
     }
 }

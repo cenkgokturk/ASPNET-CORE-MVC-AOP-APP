@@ -1,14 +1,13 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using ASPNETAOP.Models;
+using Microsoft.Data.SqlClient;
 using PostSharp.Aspects;
 using PostSharp.Serialization;
 using System;
 using System.Threading.Tasks;
-using ASPNETAOP.Models;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http;
-using System.Net.Http;
+
 
 namespace ASPNETAOP.Aspect
 {
@@ -78,14 +77,8 @@ namespace ASPNETAOP.Aspect
 
     public class UserPermissionNotEnoughException : Exception
     {
-        public UserPermissionNotEnoughException()
-        {
+        public UserPermissionNotEnoughException(){}
 
-        }
-
-        public UserPermissionNotEnoughException(String message) : base(message)
-        {
-
-        }
+        public UserPermissionNotEnoughException(String message) : base(message){}
     }
 }

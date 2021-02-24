@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ASPNETAOP.Models
 {
@@ -21,12 +18,7 @@ namespace ASPNETAOP.Models
             this.CurrentUserInfo = CurrentUserInfo;
         }
 
-        public CurrentUser()
-        {
-
-        }
-
-
+        public CurrentUser(){}
 
         public String getUsername(){return CurrentUserInfo[1];}
         public String getUsermail(){return CurrentUserInfo[2];}

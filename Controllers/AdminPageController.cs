@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ASPNETAOP.Aspect;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;

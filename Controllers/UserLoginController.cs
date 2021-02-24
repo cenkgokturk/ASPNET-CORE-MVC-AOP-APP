@@ -28,16 +28,15 @@ namespace ASPNETAOP.Controllers
         }
 
 
-        //Used to log user activies 
-        //Session managment has been moved to ASPNETAOP-WebServer solution, which can be accessed with SendRequest method
+        //Used to log user activies
         public void SaveCookie(UserLogin ur)
         {
             String connection = _configuration.GetConnectionString("localDatabase");
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
                 DateTime thisDay = DateTime.Now;
-                //  30/3/2020 12:00 AM
-                //0 - Logged Out & 1 - Logged in
+                //Date format is 30/3/2020 12:00 AM
+                //Number at the end indicates 0 for Logged Out & 1 for Logged in
                 string sqlQuerySession = "insert into AccountSessions(Usermail, LoginDate, IsLoggedIn) values ('" + ur.Usermail + "', '" + thisDay.ToString("g") + "', 1 )";
                 using (SqlCommand sqlcommCookie = new SqlCommand(sqlQuerySession, sqlconn))
                 {
@@ -47,13 +46,10 @@ namespace ASPNETAOP.Controllers
             }
         }
 
+        //Used for sessions by sending the current user information to Web Api
         public void SendRequest(String[] ur)
         {
             HttpClient client = new HttpClient();
-
-            //Console.WriteLine("UserLoginCOntroller -> session id is :" + (HttpContext.Session.Id) );
-
-            Console.WriteLine("SessionlistCount: " + SessionList.listObject.count);
             SessionList.listObject.Pair.Add(new Pair(HttpContext.Session.Id, SessionList.listObject.count));
 
             PostJsonHttpClient("https://localhost:44316/api/SessionItems", client, ur);
@@ -69,9 +65,10 @@ namespace ASPNETAOP.Controllers
         }
 
         //When user is redirected to login page, user's info is 
-        //1. stored in CurrentUser array (in ASPNETAOP project)
-        //2. sent to UserSession (in ASPNETAOP-Session) to be stored in DatabaseDb 
-        //3. saved as a cookie (in ASPNETAOP) in AccountDb
+        //1. stored in CurrentUser array (in ASPNETAOP project) 
+        //2. saved as a cookie (in ASPNETAOP) in AccountDb
+        //3. sent to UserSession (in ASPNETAOP-Session) to be stored in DatabaseDb 
+
         [HttpPost]
         public IActionResult Login(UserLogin ur)
         {
@@ -94,7 +91,7 @@ namespace ASPNETAOP.Controllers
                             if (reader.GetString(0).Equals(ur.Userpassword)){
                                 ViewData["Message"] = "Welcome: " + ur.Usermail;
 
-                                //Hold current user's info in ASPNETAOP project 
+                                //1. Holds current user's info in ASPNETAOP project 
                                 String userID = reader.GetInt32(1).ToString();    //UserID;
                                 String username = reader.GetString(2);    //Username;
                                 String usermail = ur.Usermail;
@@ -107,10 +104,10 @@ namespace ASPNETAOP.Controllers
                                 reader.Close();
                                 sqlconn.Close();
 
-                                //Store user's session as a cookie in AccountDb
+                                //2. Stores user's session as a cookie in AccountDb
                                 SaveCookie(ur);
 
-                                //Send the user information to ASPNETAOP-WebServer for session
+                                //3. Sends the user information to ASPNETAOP-WebServer for session
                                 String[] UserLoggedIn = {userID, username, usermail, roleID};
                                 SendRequest(UserLoggedIn);
 

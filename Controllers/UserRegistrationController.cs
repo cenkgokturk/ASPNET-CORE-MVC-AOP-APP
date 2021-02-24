@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Data;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
 using Microsoft.Extensions.Configuration;
@@ -18,12 +14,14 @@ namespace ASPNETAOP.Controllers
         [Route("Home/Index")]
         public IActionResult Index()
         {
+            //Necessary to prevent sessionID from changing with every request
             HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
         public IActionResult Create()
         {
+            //Necessary to prevent sessionID from changing with every request
             HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
@@ -31,8 +29,10 @@ namespace ASPNETAOP.Controllers
         [HttpPost]
         public IActionResult Create(UserRegister ur)
         {
+            //Necessary to prevent sessionID from changing with every request
             HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
 
+            //Add new user to the database
             String connection = _configuration.GetConnectionString("localDatabase");
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
