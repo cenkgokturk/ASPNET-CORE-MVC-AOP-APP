@@ -1,4 +1,5 @@
 ﻿using ASPNETAOP.Models;
+using ASPNETAOP.Controllers;
 using Microsoft.Data.SqlClient;
 using PostSharp.Aspects;
 using PostSharp.Serialization;
@@ -17,11 +18,24 @@ namespace ASPNETAOP.Aspect
     {
         public override void OnEntry(MethodExecutionArgs args)
         {
-            //HttpClient client = new HttpClient();
-            //Task<SessionItem> userSession = GetJsonHttpClient("https://localhost:44316/api/SessionItems/8", client);;
+            UserSessionController us = new UserSessionController();
+            String sessionID = "";
 
-            //if (userSession.Result.Roleid != 1) throw new UserPermissionNotEnoughException();
 
+            //Get the current user from WebApi
+            foreach (Pair pair in SessionList.listObject.Pair)
+            {
+                if (sessionID.Equals(pair.getSessionID()))
+                {
+                    HttpClient client = new HttpClient();
+                    String connectionString = "https://localhost:44316/api/SessionItems/" + pair.getRequestID();
+                    Task<SessionItem> userSession = GetJsonHttpClient(connectionString, client); ;
+
+                    if (userSession.Result.Roleid != 1) throw new UserPermissionNotEnoughException();
+                }
+            }
+
+            /*
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
@@ -50,6 +64,7 @@ namespace ASPNETAOP.Aspect
                     reader.Close();
                 }
             }
+            */
         }
 
         private static async Task<SessionItem> GetJsonHttpClient(string uri, HttpClient httpClient)

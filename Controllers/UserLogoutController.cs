@@ -12,7 +12,6 @@ namespace ASPNETAOP.Controllers
         private IConfiguration _configuration;
         public UserLogoutController(IConfiguration Configuration) { _configuration = Configuration; }
 
-
         public IActionResult Logout()
         {
             //Necessary to prevent sessionID from changing with every request
