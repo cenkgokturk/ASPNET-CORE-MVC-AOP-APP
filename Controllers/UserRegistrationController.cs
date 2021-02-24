@@ -18,17 +18,21 @@ namespace ASPNETAOP.Controllers
         [Route("Home/Index")]
         public IActionResult Index()
         {
+            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
         public IActionResult Create()
         {
+            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
         [HttpPost]
         public IActionResult Create(UserRegister ur)
         {
+            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
+
             String connection = _configuration.GetConnectionString("localDatabase");
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {

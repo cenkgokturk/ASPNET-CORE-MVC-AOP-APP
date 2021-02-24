@@ -16,6 +16,7 @@ namespace ASPNETAOP.Controllers
 
         public IActionResult Logout()
         {
+            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             //Change IsLoggedIn to 0 in AccountSessions table
             String connection = _configuration.GetConnectionString("localDatabase");
             using (SqlConnection sqlconn = new SqlConnection(connection))

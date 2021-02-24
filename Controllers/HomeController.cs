@@ -20,11 +20,13 @@ namespace ASPNETAOP.Controllers
 
         public IActionResult Index()
         {
+            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
         public IActionResult Privacy()
         {
+            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 

@@ -21,14 +21,11 @@ namespace ASPNETAOP.Aspect
     {
         public override void OnEntry(MethodExecutionArgs args)
         {
-            HttpClient client = new HttpClient();
-            Task<SessionItem> userSession = GetJsonHttpClient("https://localhost:44316/api/SessionItems/8", client);;
+            //HttpClient client = new HttpClient();
+            //Task<SessionItem> userSession = GetJsonHttpClient("https://localhost:44316/api/SessionItems/8", client);;
 
-            Console.WriteLine("****IsAuthorizedAttribute : " + userSession.Result);
+            //if (userSession.Result.Roleid != 1) throw new UserPermissionNotEnoughException();
 
-            if(userSession.Result.Roleid != 1) throw new UserPermissionNotEnoughException();
-
-            /*
             String connection = "Data Source=DESKTOP-II1M7LK;Initial Catalog=AccountDb;Integrated Security=True";
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
@@ -57,8 +54,6 @@ namespace ASPNETAOP.Aspect
                     reader.Close();
                 }
             }
-            */
-
         }
 
         private static async Task<SessionItem> GetJsonHttpClient(string uri, HttpClient httpClient)

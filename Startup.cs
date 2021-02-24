@@ -1,5 +1,6 @@
 using ASPNETAOP.Aspect;
 using ASPNETAOP.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -30,12 +31,13 @@ namespace ASPNETAOP
         {
             services.AddDistributedMemoryCache();
 
-            services.AddSession(options =>
+            services.AddSession(opt =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(100);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
+                opt.IdleTimeout = TimeSpan.FromSeconds(10000);
+                opt.Cookie.IsEssential = true;
             });
+
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
             services.AddControllersWithViews();
             services.AddSingleton<IConfiguration>(Configuration);
@@ -44,6 +46,7 @@ namespace ASPNETAOP
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSession();
 
             if (env.IsDevelopment())
             {
@@ -110,16 +113,17 @@ namespace ASPNETAOP
                 app.UseHsts();
             }
 
-            SessionList.listObject.count = 0;
-
-            app.UseSession();
+            SessionList.listObject.count = 1;
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-
             app.UseAuthorization();
+
+            
+            app.UseCookiePolicy();
+
 
             app.UseEndpoints(endpoints =>
             {

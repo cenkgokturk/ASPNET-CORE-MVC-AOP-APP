@@ -22,11 +22,13 @@ namespace ASPNETAOP.Controllers
 
         public IActionResult Index()
         {
+            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
         public IActionResult Login()
         {
+            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
@@ -54,7 +56,7 @@ namespace ASPNETAOP.Controllers
         {
             HttpClient client = new HttpClient();
 
-            Console.WriteLine("In UserLoginCOntroller -- session id is :" + (HttpContext.Session.Id));
+            Console.WriteLine("UserLoginCOntroller -> session id is :" + (HttpContext.Session.Id) );
 
             SessionList.listObject.Pair.Add(new Pair(HttpContext.Session.Id, SessionList.listObject.count));
 
@@ -77,6 +79,7 @@ namespace ASPNETAOP.Controllers
         [HttpPost]
         public IActionResult Login(UserLogin ur)
         {
+            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
 
             String connection = _configuration.GetConnectionString("localDatabase");
 
