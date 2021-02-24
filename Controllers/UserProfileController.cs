@@ -29,7 +29,7 @@ namespace ASPNETAOP.Controllers
             HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             foreach (Pair pair in SessionList.listObject.Pair)
             {
-                Console.WriteLine("ProfileController -> saved id: " + pair.getSessionID() + " &&  current id" + HttpContext.Session.Id);
+                //Console.WriteLine("ProfileController -> saved id: " + pair.getSessionID() + " &&  current id" + HttpContext.Session.Id);
                 if (HttpContext.Session.Id.Equals(pair.getSessionID()))
                 {
                     HttpClient client = new HttpClient();
@@ -49,10 +49,11 @@ namespace ASPNETAOP.Controllers
             HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
             foreach (Pair pair in SessionList.listObject.Pair)
             {
-                Console.WriteLine("ProfileController -> saved id: " + pair.getSessionID() + " &&  current id " + HttpContext.Session.Id + " && cookie: ");
+                //Console.WriteLine("ProfileController -> saved id: " + pair.getSessionID() + " &&  current id " + HttpContext.Session.Id + " && cookie: ");
                 if (HttpContext.Session.Id.Equals(pair.getSessionID()))
                 {
                     HttpClient client = new HttpClient();
+                    Console.WriteLine("SessinObjectCOunt2: " + SessionList.listObject.count + "and RequestID: " + pair.getRequestID());
                     String connectionString = "https://localhost:44316/api/SessionItems/" + SessionList.listObject.count;
                     Task<SessionItem> userSession = GetJsonHttpClient(connectionString, client); ;
 

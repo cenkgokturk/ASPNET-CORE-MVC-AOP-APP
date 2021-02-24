@@ -40,7 +40,7 @@ namespace ASPNETAOP.Controllers
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("ttps://localhost:44316/api/");
+                client.BaseAddress = new Uri("https://localhost:44316/api/");
 
 
                 foreach (Pair pair in SessionList.listObject.Pair)
@@ -52,13 +52,12 @@ namespace ASPNETAOP.Controllers
 
                         var result = deleteTask.Result;
 
-                        if (!result.IsSuccessStatusCode) {
-                           
-                        }
+                        if (!result.IsSuccessStatusCode) {}
+
+                        SessionList.listObject.Pair.Remove(pair);
+                        break;
                     }
                 }
-
-
             }
 
             return RedirectToAction("Login", "UserLogin");
