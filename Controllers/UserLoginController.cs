@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Data;
 using Microsoft.Data.SqlClient;
 using ASPNETAOP.Models;
-using ASPNETAOP.Aspect;
-using ASPNETAOP;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using System.Net.Http.Json;

@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ASPNETAOP.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ASPNETAOP.Controllers
@@ -33,6 +36,29 @@ namespace ASPNETAOP.Controllers
             for(int i=0; i<3; i++)
             {
                 Models.CurrentUser.currentUser.CurrentUserInfo[i] = null;
+            }
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("ttps://localhost:44316/api/");
+
+
+                foreach (Pair pair in SessionList.listObject.Pair)
+                {
+                    if (HttpContext.Session.Id.Equals(pair.getSessionID()))
+                    {
+                        var deleteTask = client.DeleteAsync("SessionItems/" + pair.getRequestID());
+                        deleteTask.Wait();
+
+                        var result = deleteTask.Result;
+
+                        if (!result.IsSuccessStatusCode) {
+                           
+                        }
+                    }
+                }
+
+
             }
 
             return RedirectToAction("Login", "UserLogin");
