@@ -28,7 +28,6 @@ namespace ASPNETAOP.Controllers
 
         private int GetUsedID(String Usermail)
         {
-            Console.WriteLine("Get UserID Entry");
             int UserID = -1;
 
             String connection = _configuration.GetConnectionString("localDatabase");
@@ -51,9 +50,6 @@ namespace ASPNETAOP.Controllers
                     sqlconn.Close();
                 }
             }
-
-            Console.WriteLine("Get UserID Close");
-
             return UserID;
         }
 
@@ -98,7 +94,6 @@ namespace ASPNETAOP.Controllers
             //retrieve the UserID of the newly created user
             int UserID = GetUsedID(ur.Usermail);
 
-            Console.WriteLine("Add UserROles");
             //define a standart permission
             AddUserRole(UserID);
 

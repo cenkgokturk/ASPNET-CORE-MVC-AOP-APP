@@ -8,8 +8,10 @@
 
 <table>
     <tr>
+        <th>ID</th>
         <th>User Name</th>
         <th>Mail</th>
+        <th>Role</th>
         <th>Login Date</th>
         <th>IsLoggedIn</th>
         <th></th>
@@ -17,8 +19,10 @@
     @foreach(var user in Model)
     {
 <tr>
+    <td>@user.UserID</td>
     <td>@user.Username</td>
     <td>@user.Usermail</td>
+    <td>@user.Rolename</td>
     <td>@user.LoginDate</td>
     <td>@user.IsLoggedIn</td>
 </tr>

@@ -50,7 +50,7 @@ namespace ASPNETAOP.Controllers
         public void SendRequest(String[] ur)
         {
             HttpClient client = new HttpClient();
-            SessionList.listObject.Pair.Add(new Pair(HttpContext.Session.Id, SessionList.listObject.count));
+            SessionList.listObject.Pair.Add(new Pair(HttpContext.Session.Id, SessionList.listObject.count, Int32.Parse(ur[4]) ));
 
             PostJsonHttpClient("https://localhost:44316/api/SessionItems", client, ur);
         }
@@ -108,7 +108,7 @@ namespace ASPNETAOP.Controllers
                                 SaveCookie(ur);
 
                                 //3. Sends the user information to ASPNETAOP-WebServer for session
-                                String[] UserLoggedIn = {userID, username, usermail, roleID};
+                                String[] UserLoggedIn = {userID, username, usermail, roleID, userID};
                                 SendRequest(UserLoggedIn);
 
                                 ViewData["Message"] = "Successfully logged in";
