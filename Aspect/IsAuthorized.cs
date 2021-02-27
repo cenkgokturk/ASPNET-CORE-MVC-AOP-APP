@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
-
+using Microsoft.AspNetCore.Http;
+using ASPNETAOP.Session;
 
 namespace ASPNETAOP.Aspect
 {
@@ -18,9 +19,7 @@ namespace ASPNETAOP.Aspect
     {
         public override void OnEntry(MethodExecutionArgs args)
         {
-            UserSessionController us = new UserSessionController();
-            String sessionID = "";
-
+            String sessionID = AppHttpContext.Current.Session.Id;
 
             //Get the current user from WebApi
             foreach (Pair pair in SessionList.listObject.Pair)
@@ -31,6 +30,7 @@ namespace ASPNETAOP.Aspect
                     String connectionString = "https://localhost:44316/api/SessionItems/" + pair.getRequestID();
                     Task<SessionItem> userSession = GetJsonHttpClient(connectionString, client); ;
 
+                    //check if the current user has an admin role
                     if (userSession.Result.Roleid != 1) throw new UserPermissionNotEnoughException();
                 }
             }

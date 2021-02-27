@@ -50,6 +50,9 @@ namespace ASPNETAOP.Controllers
         public void SendRequest(String[] ur)
         {
             HttpClient client = new HttpClient();
+
+            Console.WriteLine("LoginController Sessiond id: " + HttpContext.Session.Id);
+
             SessionList.listObject.Pair.Add(new Pair(HttpContext.Session.Id, SessionList.listObject.count, Int32.Parse(ur[4]) ));
 
             PostJsonHttpClient("https://localhost:44316/api/SessionItems", client, ur);
