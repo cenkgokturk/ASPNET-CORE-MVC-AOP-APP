@@ -41,7 +41,7 @@ namespace ASPNETAOP.Controllers
             }
         }
 
-        //Used to extract user information from retrieved json file
+        // Used to extract user information from retrieved json file
         private static async Task<SessionItem> GetJsonHttpClient(string uri, HttpClient httpClient)
         {
             try

@@ -143,4 +143,3 @@ C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\ASPNETAOP.pdb
 C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\ASPNETAOP.genruntimeconfig.cache
 C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\PostSharp\postsharp.app.config
 C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\Razor\Views\AdminPageEdit\UserEdit.cshtml.g.cs
-C:\Users\Cenk\source\repos\ASPNETAOP\obj\Debug\net5.0\ASPNETAOP.csprojAssemblyReference.cache
