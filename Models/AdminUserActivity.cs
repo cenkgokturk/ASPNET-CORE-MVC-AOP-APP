@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ASPNETAOP.Models
+﻿namespace ASPNETAOP.Models
 {
-    public class AdminPage
+    public class AdminUserActivity
     {
         public int UserID { get; set; }
         public string Username { get; set; }
