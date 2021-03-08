@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using ASPNETAOP.Models;
+using ASPNETAOP.Session;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using ASPNETAOP.Models;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http.Json;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System;
 
 namespace ASPNETAOP.Controllers
 {
@@ -15,17 +19,18 @@ namespace ASPNETAOP.Controllers
         public IActionResult Index()
         {
             //Necessary to prevent sessionID from changing with every request
-            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
+            HttpContext.Session.Set("CurrentHTTPSession", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
         public IActionResult Create()
         {
             //Necessary to prevent sessionID from changing with every request
-            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
+            HttpContext.Session.Set("CurrentHTTPSession", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
+        //Retrieve the UserID of the given User 
         private int GetUsedID(String Usermail)
         {
             int UserID = -1;
@@ -53,11 +58,13 @@ namespace ASPNETAOP.Controllers
             return UserID;
         }
 
+        // Add a new entity to the UserRoles with the given user
         private void AddUserRole(int UserID)
         {
             String connection = _configuration.GetConnectionString("localDatabase");
             using (SqlConnection sqlconn = new SqlConnection(connection))
             {
+                // Number 2 for the Roleid indicates RegularUser
                 string sqlquery = "insert into UserRoles(UserID, Roleid) values ('" + UserID + "', 2)";
                 using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
                 {
@@ -65,40 +72,39 @@ namespace ASPNETAOP.Controllers
                     sqlcomm.ExecuteNonQuery();
                 }
             }
-
-            Console.WriteLine("UserROle added");
         }
 
         [HttpPost]
         public IActionResult Create(UserRegister ur)
         {
-            //Necessary to prevent sessionID from changing with every request
-            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
+            // Necessary to prevent sessionID from changing with every request
+            HttpContext.Session.Set("CurrentHTTPSession", new byte[] { 1, 2, 3, 4, 5 });
 
-            //Add a new user to the database
-            String connection = _configuration.GetConnectionString("localDatabase");
-            using (SqlConnection sqlconn = new SqlConnection(connection))
-            {
-                string sqlquery = "insert into AccountInfo(Username, Usermail, Userpassword) values ('" + ur.Username + "', '" + ur.Usermail + "', '" + ur.Userpassword + "' )";
-                using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
-                {
-                    sqlconn.Open();
-                    sqlcomm.ExecuteNonQuery();
+            //Make the SessionId smaller
+            long sessionId = Hash.CurrentHashed(HttpContext.Session.Id);
 
-                    ViewData["Message"] = "New User "+ur.Username+ " is saved successfully";
-
-                    sqlconn.Close();
-                }
-            }
-
-            //retrieve the UserID of the newly created user
-            int UserID = GetUsedID(ur.Usermail);
-
-            //define a standart permission
-            AddUserRole(UserID);
+            String[] registerInfo = { ur.Username, ur.Usermail, ur.Userpassword };
+            SendUserRegister(registerInfo, sessionId);
 
             return View(ur);
         }
 
+        //Post request to Web Api with the given user credentials
+        public void SendUserRegister(String[] registerInfo, long sessionId)
+        {
+            HttpClient client = new HttpClient();
+
+            PostUserLogin("https://localhost:44316/api/UserLoginItems", client, registerInfo, sessionId);
+        }
+
+        //Helper method for the SendUserLogin
+        private static async Task PostUserLogin(string uri, HttpClient httpClient, String[] registerInfo, long sessionId)
+        {
+            var postUser = new UserLoginItem { Id = sessionId, Username = registerInfo[0], Usermail = registerInfo[1], Userpassword = registerInfo[2], isUserLoggedIn = 4 };
+
+            var postResponse = await httpClient.PostAsJsonAsync(uri, postUser);
+
+            postResponse.EnsureSuccessStatusCode();
+        }
     }
 }
