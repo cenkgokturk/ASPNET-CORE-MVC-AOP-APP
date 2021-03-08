@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-using ASPNETAOP.Models;
+﻿using ASPNETAOP.Models;
+using ASPNETAOP.Session;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.Net.Http;
 using System.Net.Http.Json;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System;
 
 namespace ASPNETAOP.Controllers
 {
@@ -17,120 +18,123 @@ namespace ASPNETAOP.Controllers
 
         public IActionResult Index()
         {
-            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
+            HttpContext.Session.Set("CurrentHTTPSession", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
         public IActionResult Login()
         {
-            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
+            HttpContext.Session.Set("CurrentHTTPSession", new byte[] { 1, 2, 3, 4, 5 });
             return View();
         }
 
-
-        //Used to log user activies
-        public void SaveCookie(UserLogin ur)
+        [HttpPost]
+        public IActionResult Login(UserLogin ur)
         {
-            String connection = _configuration.GetConnectionString("localDatabase");
-            using (SqlConnection sqlconn = new SqlConnection(connection))
+            HttpContext.Session.Set("CurrentHTTPSession", new byte[] { 1, 2, 3, 4, 5 });
+
+            //Make the SessionId smaller
+            long sessionId = Hash.CurrentHashed(HttpContext.Session.Id);
+
+            //Send the current login information to the ASPNETAOP-WebServer project
+            String[] loginInfo = { ur.Usermail, ur.Userpassword };
+            SendUserLogin(loginInfo, sessionId);
+
+            //Get the result of the previous request
+            int userLoginStatus = GetUserLogin(sessionId);
+
+            if (userLoginStatus == 1)   //Given password matches the one in the database
             {
-                DateTime thisDay = DateTime.Now;
-                //Date format is 30/3/2020 12:00 AM
-                //Number at the end indicates 0 for Logged Out & 1 for Logged in
-                string sqlQuerySession = "insert into AccountSessions(Usermail, LoginDate, IsLoggedIn) values ('" + ur.Usermail + "', '" + thisDay.ToString("g") + "', 1 )";
-                using (SqlCommand sqlcommCookie = new SqlCommand(sqlQuerySession, sqlconn))
-                {
-                    sqlconn.Open();
-                    sqlcommCookie.ExecuteNonQuery();
-                }
+                ViewData["Message"] = "Welcome: " + ur.Usermail;
+                ViewData["Message"] = "Successfully logged in";
+
+                int userRole = GetUserRole(sessionId);
+
+                //Change the layout according to user
+                if (userRole == 1) { TempData["ResultMessage"] = "Admin"; }
+                else { TempData["ResultMessage"] = "Regular"; }
+
+                return RedirectToAction("Profile", "UserProfile", new { ur });
             }
+            else if (userLoginStatus == 2)   //Given password does not match
+            {
+                ViewData["Message"] = "Incorrect password";
+            }
+            else if (userLoginStatus == 3)  //No user was found with the given mail address
+            {
+                ViewData["Message"] = "No user with this email address has been found";
+                return RedirectToAction("Create", "UserRegistration");
+            }
+
+            return View(ur);
         }
 
-        //Used for sessions by sending the current user information to Web Api
-        public void SendRequest(String[] ur)
+        //Post request to Web Api with the given user credentials
+        public void SendUserLogin(String[] loginInfo, long sessionId)
         {
             HttpClient client = new HttpClient();
 
-            Console.WriteLine("LoginController Sessiond id: " + HttpContext.Session.Id);
-
-            SessionList.listObject.Pair.Add(new Pair(HttpContext.Session.Id, SessionList.listObject.count, Int32.Parse(ur[4]) ));
-
-            PostJsonHttpClient("https://localhost:44316/api/SessionItems", client, ur);
+            PostUserLogin("https://localhost:44316/api/UserLoginItems", client, loginInfo, sessionId);
         }
 
-        private static async Task PostJsonHttpClient(string uri, HttpClient httpClient, String[] userInfo)
+        //Helper method for the SendUserLogin
+        private static async Task PostUserLogin(string uri, HttpClient httpClient, String[] loginInfo, long sessionId)
         {
-            var postUser = new SessionItem { Id = SessionList.listObject.count++,  UserID = Int32.Parse(userInfo[0]), Username = userInfo[1], Usermail = userInfo[2], Roleid = Int32.Parse(userInfo[3]) };
+            var postUser = new UserLoginItem { Id = sessionId, Usermail = loginInfo[0], Userpassword = loginInfo[1], isUserLoggedIn = 0 };
 
             var postResponse = await httpClient.PostAsJsonAsync(uri, postUser);
 
             postResponse.EnsureSuccessStatusCode();
         }
 
-        //When user is redirected to login page, user's info is 
-        //1. saved in the database (for logging)
-        //2. sent to ASPNETAOP-WebServer (for sessions)
-        [HttpPost]
-        public IActionResult Login(UserLogin ur)
+        //Get Request to check if the login is authorized
+        private int GetUserLogin(long sessionId)
         {
-            HttpContext.Session.Set("What", new byte[] { 1, 2, 3, 4, 5 });
+            int isUserLoggedIn = 0;
 
-            String connection = _configuration.GetConnectionString("localDatabase");
+            HttpClient client = new HttpClient();
+            String connectionString = "https://localhost:44316/api/UserLoginItems/" + sessionId;
+            Task<UserLoginItem> userLogin = GetJsonHttpClient(connectionString, client);
 
-            using (SqlConnection sqlconn = new SqlConnection(connection))
+            if (userLogin.Result != null) { isUserLoggedIn = userLogin.Result.isUserLoggedIn; }
+
+            return isUserLoggedIn;
+        }
+
+        private int GetUserRole(long sessionId)
+        {
+            int UserRole = 0;
+
+            HttpClient client = new HttpClient();
+            String connectionString = "https://localhost:44316/api/UserLoginItems/" + sessionId;
+            Task<UserLoginItem> userLogin = GetJsonHttpClient(connectionString, client);
+
+            if (userLogin.Result != null) { UserRole = userLogin.Result.UserRole; }
+
+            return UserRole;
+        }
+
+        //Used to extract user information from retrieved json file
+        private static async Task<UserLoginItem> GetJsonHttpClient(string uri, HttpClient httpClient)
+        {
+            try
             {
-                string sqlquery = "select AI.Userpassword, AI.UserID, AI.Username, UR.Roleid  from AccountInfo AI, UserRoles UR where AI.UserID = UR.UserID AND AI.Usermail = '" + ur.Usermail + "' ";
-                using (SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn))
-                {
-                    sqlconn.Open();
-                    SqlDataReader reader = sqlcomm.ExecuteReader();
-
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            if (reader.GetString(0).Equals(ur.Userpassword)){
-                                ViewData["Message"] = "Welcome: " + ur.Usermail;
-
-                                String userID = reader.GetInt32(1).ToString(); 
-                                String username = reader.GetString(2);   
-                                String usermail = ur.Usermail;
-                                String roleID = reader.GetInt32(3).ToString();
-
-                                reader.Close();
-                                sqlconn.Close();
-
-                                // 1. Stores user activity in AccountDb
-                                SaveCookie(ur);
-
-                                // 2. Sends the user information to ASPNETAOP-WebServer for sessions
-                                String[] UserLoggedIn = {userID, username, usermail, roleID, userID};
-                                SendRequest(UserLoggedIn);
-
-                                ViewData["Message"] = "Successfully logged in";
-                                reader.Close();
-
-                                return RedirectToAction("Profile","UserProfile", new { ur });
-                            }
-                            else
-                            {
-                                ViewData["Message"] = "Incorrect password";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ViewData["Message"] = "No user with this email address has been found";
-                        reader.Close();
-
-                        return RedirectToAction("Create", "UserRegistration");
-                    }
-                    reader.Close();
-                }
-
+                return await httpClient.GetFromJsonAsync<UserLoginItem>(uri);
+            }
+            catch (HttpRequestException) // Non success
+            {
+                Console.WriteLine("An error occurred.");
+            }
+            catch (NotSupportedException) // When content type is not valid
+            {
+                Console.WriteLine("The content type is not supported.");
+            }
+            catch (JsonException) // Invalid JSON
+            {
+                Console.WriteLine("Invalid JSON.");
             }
 
-            return View(ur);
+            return null;
         }
     }
 }
