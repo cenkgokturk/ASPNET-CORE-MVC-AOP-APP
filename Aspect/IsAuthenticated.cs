@@ -2,6 +2,10 @@
 using ASPNETAOP.Session;
 using PostSharp.Aspects;
 using PostSharp.Serialization;
+using System.Net.Http.Json;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System;
 
 namespace ASPNETAOP.Aspect
@@ -12,16 +16,36 @@ namespace ASPNETAOP.Aspect
     {
         public override void OnEntry(MethodExecutionArgs args)
         {
-            String sessionID = AppHttpContext.Current.Session.Id;
-            Boolean userFound = false;
+            Console.WriteLine("Aspect entry");
+            HttpClient client = new HttpClient();
+            String connectionString = "https://localhost:44316/api/UserLoginItems/" + Hash.CurrentHashed(AppHttpContext.Current.Session.Id);
+            Task<UserLoginItem> userLogin = GetJsonHttpClient(connectionString, client); ;
 
-            //Check if there is a session for the active sessionID
-            foreach (Pair pair in SessionList.listObject.Pair)
+            if (userLogin == null || userLogin.Result == null || userLogin.Result.Id == null) throw new UserNotLoggedInException(); //check if the current user has an active session
+            if (userLogin.Result.isUserLoggedIn != 1) throw new UserNotLoggedInException();  //check if the user is successfully authenticated
+        }
+
+        //Used to extract user information from retrieved json file
+        private static async Task<UserLoginItem> GetJsonHttpClient(string uri, HttpClient httpClient)
+        {
+            try
             {
-                if (sessionID.Equals(pair.getSessionID())) userFound = true;
+                return await httpClient.GetFromJsonAsync<UserLoginItem>(uri);
+            }
+            catch (HttpRequestException) // Non success
+            {
+                Console.WriteLine("An error occurred.");
+            }
+            catch (NotSupportedException) // When content type is not valid
+            {
+                Console.WriteLine("The content type is not supported.");
+            }
+            catch (JsonException) // Invalid JSON
+            {
+                Console.WriteLine("Invalid JSON.");
             }
 
-            if (!userFound) throw new UserNotLoggedInException();
+            return null;
         }
     }
 
